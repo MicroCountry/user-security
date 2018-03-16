@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hannea.dao.MITMallManageUserRoleDao">
+
+    <insert id="batchInsert">
+        insert into `mit-user`.`mit_mall_manage_user_role` ( `userRoleId`, `userId`, `roleId`, `mallId`, `userRoleStatus`, `userRoleCreateBy`, `userRoleCreateTime`)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.userRoleId},#{item.userId},#{item.roleId},#{item.mallId},#{item.userRoleStatus}, #{item.userRoleCreateBy}, #{item.userRoleCreateTime})
+        </foreach>
+    </insert>
+    <select id="selectByMallAndUserId" resultType="com.hannea.model.MITMallManageRole">
+        select mr.roleId,mr.mallId,mr.roleName,mr.roleDescription,mr.roleStatus,mr.roleCreateBy
+        from mit_mall_manage_user_role mur
+        ,    mit_mall_manage_role mr
+        where mur.roleId = mr.roleId
+        and mr.roleStatus = 1
+        and mur.userRoleStatus = 1
+        and mur.userId = #{userId}
+        and mur.mallId = #{mallId}
+        and mr.mallId = #{mallId}
+    </select>
+
+    <delete id="deleteUserRole">
+        DELETE FROM mit_mall_manage_user_role
+        where userId = #{userId}
+    </delete>
+</mapper>

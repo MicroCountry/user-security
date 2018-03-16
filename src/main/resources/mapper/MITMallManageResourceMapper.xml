@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hannea.dao.MITMallManageResourceDao">
+    <select id="selectByResourceTypeAndAction" resultType="com.hannea.model.MITMallManageResource">
+        select *
+        from mit_mall_manage_resource
+        where 1=1
+        and resourceAction = #{resourceAction}
+        and resourceType = #{resourceType}
+        and mallId = #{mallId}
+        and resourceStatus = 1
+    </select>
+    <select id="selectAllMallMenu" resultType="com.hannea.model.MITMallManageResource">
+        select *
+        from mit_mall_manage_resource
+        where 1=1
+        and resourceType = 1
+        and mallId = #{mallId}
+        and resourceStatus = 1
+        order by resourceId
+    </select>
+    <select id="selectApiByResourceIdList" resultType="com.hannea.model.MITMallManageResource">
+        SELECT *
+        from mit_mall_manage_resource
+        where 1=1
+        and resourcePageId in
+        <foreach collection="list" separator="," open="(" close=")" item="item" index="index">
+            #{item}
+        </foreach>
+        and resourceType = 2
+        order by resourceId
+    </select>
+    <select id="selectPageByResourceIdList" resultType="com.hannea.model.MITMallManageResource">
+        SELECT *
+        from mit_mall_manage_resource
+        where 1=1
+        and resourceId in
+        <foreach collection="list" separator="," open="(" close=")" item="item" index="index">
+            #{item}
+        </foreach>
+        and resourceType = 1
+        and resourceStatus = 1
+        order by resourceId
+    </select>
+</mapper>

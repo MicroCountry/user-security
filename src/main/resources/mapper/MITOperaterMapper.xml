@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hannea.dao.MITOperaterDao">
+    <resultMap id="BaseResultMap" type="com.hannea.model.MITOperater">
+        <id column="operaterId" jdbcType="BIGINT" property="operaterId" />
+        <result column="mallId" jdbcType="BIGINT" property="mallId" />
+        <result column="operaterAccount" jdbcType="VARCHAR" property="operaterAccount" />
+        <result column="operaterPassword" jdbcType="VARCHAR" property="operaterPassword" />
+        <result column="operaterStatus" jdbcType="INTEGER" property="operaterStatus" />
+        <result column="operaterCreateTime" jdbcType="VARCHAR" property="operaterCreateTime" />
+        <result column="operaterName" jdbcType="VARCHAR" property="operaterName" />
+        <result column="lastLoginTime" jdbcType="BIGINT" property="lastLoginTime" />
+        <result column="operaterAdministrator" jdbcType="INTEGER" property="operaterAdministrator" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        operaterId, mallId, operaterAccount, operaterPassword, operaterStatus, operaterCreateTime,operaterName,lastLoginTime,operaterAdministrator
+  </sql>
+    <select id="selectByAccountAndPwd" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        FROM mit_operater
+        where operaterAccount = #{operaterAccount}
+        and operaterPassword = #{operaterPassword}
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from mit_operater
+        where operaterId = #{operaterId,jdbcType=BIGINT}
+    </select>
+    <insert id="insertSelective" parameterType="com.hannea.model.MITOperater">
+        insert into mit_operater
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="operaterId != null">
+                operaterId,
+            </if>
+            <if test="mallId != null">
+                mallId,
+            </if>
+            <if test="operaterAccount != null">
+                operaterAccount,
+            </if>
+            <if test="operaterPassword != null">
+                operaterPassword,
+            </if>
+            <if test="operaterStatus != null">
+                operaterStatus,
+            </if>
+            <if test="operaterCreateTime != null">
+                operaterCreateTime,
+            </if>
+            <if test="operaterName != null">
+                operaterName,
+            </if>
+            <if test="lastLoginTime >0 ">
+                lastLoginTime,
+            </if>
+            <if test="operaterAdministrator != null">
+                operaterAdministrator,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="operaterId != null">
+                #{operaterId,jdbcType=BIGINT},
+            </if>
+            <if test="mallId != null">
+                #{mallId,jdbcType=BIGINT},
+            </if>
+            <if test="operaterAccount != null">
+                #{operaterAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="operaterPassword != null">
+                #{operaterPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="operaterStatus != null">
+                #{operaterStatus,jdbcType=INTEGER},
+            </if>
+            <if test="operaterCreateTime != null">
+                #{operaterCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="operaterName != null">
+                #{operaterName},
+            </if>
+            <if test="lastLoginTime >0 ">
+                #{lastLoginTime},
+            </if>
+            <if test="operaterAdministrator != null">
+                #{operaterAdministrator}
+            </if>
+        </trim>
+    </insert>
+    <select id="selectByAccount" resultType="java.lang.Long">
+        select operaterId
+        FROM mit_operater
+        where operaterAccount = #{account}
+    </select>
+    <select id="selectByMallId" resultType="com.hannea.model.MITOperater">
+        select
+        <include refid="Base_Column_List" />
+        FROM mit_operater
+        where mallId = #{mallId}
+    </select>
+    <update id="updateUser">
+        update mit_operater
+        set operaterStatus = #{status}
+        where operaterId = #{userId}
+    </update>
+
+    <update id="updateUserSelective">
+        update mit_operater
+        <set>
+            <if test="password != null ">
+                operaterPassword = #{password},
+            </if>
+            <if test="name != null">
+                operaterName = #{name},
+            </if>
+        </set>
+        where operaterId = #{userId}
+    </update>
+
+    <update id="updateLoginTime">
+        update mit_operater
+        set lastLoginTime = #{loginTime}
+        where operaterId = #{operaterId}
+    </update>
+
+    <update id="updatePassword">
+        update mit_operater
+        set operaterPassword = #{newPassword}
+        where operaterId = #{operaterId}
+    </update>
+</mapper>

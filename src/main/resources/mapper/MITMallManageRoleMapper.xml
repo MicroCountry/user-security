@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hannea.dao.MITMallManageRoleDao">
+    <select id="selectByRoleByUserId" resultType="com.hannea.model.MITMallManageRole">
+        select mr.roleId, mr.roleName, mr.mallId, mr.roleId, mr.roleDescription, mr.roleStatus, mr.roleCreateBy
+        from mit_mall_manage_user_role mur
+        ,    mit_mall_manage_role mr
+        where mur.roleId = mr.roleId
+        and mr.roleStatus = 1
+        and mur.userRoleStatus = 1
+        and mur.userId = #{userId}
+        and mur.mallId = #{mallId}
+        and mr.mallId = #{mallId}
+    </select>
+
+    <select id="selectByMallId" resultType="com.hannea.model.MITMallManageRole">
+        select mr.roleId, mr.roleName, mr.mallId,mr.roleId,mr.roleDescription,mr.roleStatus,mr.roleCreateBy
+        from mit_mall_manage_role mr
+        where mr.mallId = #{mallId}
+        and mr.roleStatus = 1
+    </select>
+
+    <insert id="insert" parameterType="com.hannea.model.MITMallManageRole">
+        insert into `mit-user`.`mit_mall_manage_role` ( `roleId`, `mallId`, `roleName`, `roleDescription`, `roleStatus`, `roleCreateBy`)
+        values ( #{roleId}, #{mallId}, #{roleName}, #{roleDescription}, #{roleStatus}, #{roleCreateBy});
+    </insert>
+
+    <update id="updateRoleStatus">
+        update mit_mall_manage_role
+        set roleStatus = #{status}
+        where roleId = #{roleId}
+    </update>
+
+    <select id="selectByRoleId" parameterType="java.lang.Long" resultType="com.hannea.model.MITMallManageRole">
+      select mr.roleId, mr.roleName, mr.mallId,mr.roleId,mr.roleDescription,mr.roleStatus,mr.roleCreateBy
+        from mit_mall_manage_role mr
+        where mr.roleId = #{roleId}
+    </select>
+
+    <select id="selectAdmin" resultType="com.hannea.model.MITMallManageRole">
+         select mr.roleId,mr.roleName, mr.mallId,mr.roleId,mr.roleDescription,mr.roleStatus,mr.roleCreateBy
+        from mit_mall_manage_role mr
+        where mr.roleName = '超级管理员'
+        and mr.mallId = #{mallId}
+        limit 1
+    </select>
+
+    <select id="selectByRoleList" resultType="com.hannea.model.MITMallManageRole">
+      select mr.roleId,mr.roleName, mr.mallId,mr.roleId,mr.roleDescription,mr.roleStatus,mr.roleCreateBy
+        from mit_mall_manage_role mr
+        where mr.roleId in
+        <foreach collection="list" index="index" item="item" close=")" open="(" separator=",">
+            #{item}
+        </foreach>
+    </select>
+</mapper>
